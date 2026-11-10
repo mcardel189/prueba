@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ordena el cuento</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Atkinson+Hyperlegible:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--noche:#24305e;--papel:#fff8e8;--tira:#fff;--menta:#2fb383;--sol:#ffb703;--coral:#f4685b;--cielo:#4aa8e0;--linea:#d9cfb8}
+*{box-sizing:border-box}
+html{font-size:112.5%}
+body{margin:0;background:var(--papel);color:var(--noche);font-family:"Atkinson Hyperlegible",Verdana,sans-serif;line-height:1.5}
+h1,h2,h3,.btn{font-family:Fredoka,"Trebuchet MS",sans-serif}
+header{background:var(--noche);color:var(--papel);padding:1rem;text-align:center}
+header h1{margin:0;font-size:1.8rem}
+main{max-width:46rem;margin:0 auto;padding:1.2rem 1rem 3rem}
+section[hidden]{display:none}
+h2{font-size:1.6rem;margin:.2rem 0 .8rem}
+h2:focus{outline:none}
+.btn{border:0;border-radius:2rem;padding:.7rem 1.5rem;font-size:1.1rem;font-weight:700;background:var(--menta);color:#fff;cursor:pointer;box-shadow:0 4px 0 #1f8461}
+.btn.sec{background:var(--cielo);box-shadow:0 4px 0 #2f7fb0}
+.btn:disabled{background:#b9b4a6;box-shadow:0 4px 0 #8f8a7c;cursor:not-allowed}
+.btn:active:not(:disabled){transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.3)}
+:focus-visible{outline:4px solid var(--sol);outline-offset:2px}
+.niveles{display:flex;gap:.6rem;flex-wrap:wrap;margin:.5rem 0 1.4rem}
+.niveles button{flex:1 1 12rem;border:3px solid var(--noche);background:var(--tira);color:var(--noche);border-radius:1rem;padding:.6rem;font:inherit;font-weight:700;cursor:pointer}
+.niveles button[aria-pressed=true]{background:var(--sol)}
+.cuentos{display:grid;grid-template-columns:repeat(auto-fit,minmax(14rem,1fr));gap:1rem}
+.cuento{border:3px solid var(--noche);background:var(--tira);border-radius:1.2rem;padding:1rem;text-align:center;font:inherit;color:inherit;cursor:pointer}
+.cuento:hover{background:#fff3c9}
+.cuento .e{display:block;font-size:3rem}
+.cuento b{font-family:Fredoka,sans-serif;font-size:1.2rem}
+.texto{background:var(--tira);border:3px solid var(--noche);border-radius:1.2rem;padding:1rem 1.3rem;font-size:1.25rem;line-height:1.7;max-width:38rem}
+.texto p{margin:.5rem 0}
+.acciones{display:flex;gap:.8rem;flex-wrap:wrap;margin-top:1.2rem}
+.ayuda{background:#e8f4fc;border-radius:.8rem;padding:.6rem .9rem;margin:0 0 1rem}
+.slots{list-style:none;margin:0;padding:0;display:grid;gap:.5rem}
+.slot{display:flex;align-items:center;gap:.6rem;min-height:3.6rem;border:3px dashed var(--linea);border-radius:1rem;padding:.3rem .5rem}
+.slot .n{flex:none;width:2rem;height:2rem;border-radius:50%;background:var(--noche);color:var(--papel);display:grid;place-items:center;font-family:Fredoka,sans-serif;font-weight:700}
+.slot:has(.card){border-style:solid;border-color:transparent}
+#pool{display:flex;flex-direction:column;gap:.5rem;min-height:4rem;margin-top:1.2rem;padding:.6rem;border-radius:1rem;background:#f3ead2}
+#pool:empty::before{content:"¡Todas las frases están colocadas!";color:var(--noche);font-weight:700}
+.card{flex:1;text-align:left;font:inherit;font-size:1.05rem;color:var(--noche);background:var(--tira);border:3px solid var(--noche);border-left-width:10px;border-radius:.8rem;padding:.5rem .8rem;cursor:grab;touch-action:manipulation}
+.card:nth-child(4n+1){border-left-color:var(--coral)}
+.card:nth-child(4n+2){border-left-color:var(--cielo)}
+.card:nth-child(4n+3){border-left-color:var(--menta)}
+.card:nth-child(4n){border-left-color:var(--sol)}
+.card.sel{background:#fff3c9;box-shadow:0 0 0 4px var(--sol)}
+.card.locked{background:#dff5ec;border-color:var(--menta);cursor:default}
+.card.locked::after{content:" ✓"}
+.estrellas{font-size:3.4rem;color:var(--sol);letter-spacing:.2rem;margin:0;animation:pop .6s ease-out}
+.estrellas .off{color:#e4dcc6}
+@keyframes pop{from{transform:scale(.5);opacity:0}to{transform:scale(1);opacity:1}}
+.logros{list-style:none;padding:0;margin:1rem 0}
+.logros li{background:#dff5ec;border-radius:.8rem;padding:.6rem .9rem;margin:.4rem 0;font-size:1.1rem}
+.logros li::before{content:"🌟 "}
+@media (prefers-reduced-motion:reduce){.estrellas{animation:none}}
+</style>
+</head>
+<body>
+<header><h1>📖 Ordena el cuento</h1></header>
+<main>
+
+<section id="inicio">
+  <h2 tabindex="-1">¡Hola! ¿Qué cuento quieres leer hoy?</h2>
+  <p>Primero elige tu edad:</p>
+  <div class="niveles" role="group" aria-label="Edad">
+    <button type="button" data-n="a" aria-pressed="true">De 5 a 7 años</button>
+    <button type="button" data-n="b" aria-pressed="false">De 8 a 12 años</button>
+  </div>
+  <div class="cuentos" id="lista"></div>
+</section>
+
+<section id="lectura" hidden>
+  <h2 tabindex="-1"></h2>
+  <div class="texto" id="texto"></div>
+  <div class="acciones">
+    <button class="btn" id="yaLei" type="button">¡Ya lo he leído!</button>
+    <button class="btn sec" id="volver1" type="button">Elegir otro cuento</button>
+  </div>
+</section>
+
+<section id="juego" hidden>
+  <h2 tabindex="-1">Ordena el cuento</h2>
+  <p class="ayuda">Arrastra cada frase a su lugar. Si usas una pantalla táctil, toca una frase y después toca el hueco donde quieres ponerla. Para quitarla, tócala otra vez.</p>
+  <ol class="slots" id="slots"></ol>
+  <div id="pool" aria-label="Frases por colocar"></div>
+  <div class="acciones">
+    <button class="btn" id="comprobar" type="button" disabled>Ver mi resultado</button>
+    <button class="btn sec" id="releer" type="button">Leer otra vez</button>
+  </div>
+</section>
+
+<section id="final" hidden>
+  <h2 tabindex="-1" id="tituloFinal"></h2>
+  <p class="estrellas" id="estrellas"></p>
+  <ul class="logros" id="logros"></ul>
+  <div class="acciones">
+    <button class="btn" id="seguir" type="button">Seguir ordenando</button>
+    <button class="btn sec" id="otro" type="button">Elegir otro cuento</button>
+  </div>
+</section>
+
+</main>
+<script>
+// Cuentos de dominio público (Perrault, Esopo, Andersen, cuentos populares), redactados aquí con palabras propias.
+const CUENTOS = [
+  { t: "Caperucita Roja", e: "🧣",
+    a: ["Caperucita Roja vivía con su mamá cerca del bosque.",
+        "Un día, su mamá le dio una cesta con pan para su abuelita.",
+        "En el camino, Caperucita se encontró con un lobo.",
+        "El lobo corrió hasta la casa de la abuelita.",
+        "Un leñador llegó a tiempo y todos quedaron a salvo."],
+    b: ["Caperucita Roja vivía con su mamá cerca de un gran bosque.",
+        "Un día, su mamá le preparó una cesta con pan y miel para la abuelita, que estaba enferma.",
+        "Por el camino, Caperucita se encontró con un lobo muy astuto.",
+        "El lobo le preguntó adónde iba y ella se lo contó todo.",
+        "Mientras ella cogía flores, el lobo corrió a casa de la abuelita.",
+        "Un leñador oyó los gritos, entró a tiempo y todos quedaron a salvo."] },
+  { t: "Los tres cerditos", e: "🐷",
+    a: ["Había tres cerditos que querían tener cada uno su casa.",
+        "El primero hizo su casa de paja y el segundo, de madera.",
+        "El tercero trabajó mucho y construyó su casa con ladrillos.",
+        "Llegó el lobo y sopló y sopló las casas de paja y de madera.",
+        "Los tres cerditos se refugiaron en la casa de ladrillos, y el lobo no pudo con ella."],
+    b: ["Tres cerditos salieron de casa para construir cada uno la suya.",
+        "El primero hizo una casita de paja para terminar enseguida.",
+        "El segundo la hizo de madera y se fue a jugar.",
+        "El tercero trabajó con esfuerzo y levantó una casa de ladrillos.",
+        "Un lobo sopló y derribó la casa de paja y la de madera.",
+        "Los cerditos corrieron a la casa de ladrillos, y el lobo no pudo derribarla."] },
+  { t: "El patito feo", e: "🦢",
+    a: ["En una granja nació un patito diferente a sus hermanos.",
+        "Los demás animales se reían de él y se sentía triste.",
+        "El patito se marchó solo y pasó el invierno junto a un lago.",
+        "Al llegar la primavera, vio su reflejo en el agua.",
+        "¡Se había convertido en un precioso cisne!"],
+    b: ["En una granja, una pata empolló varios huevos y de uno salió un patito grande y gris.",
+        "Los demás animales se burlaban de él, y el patito se sentía muy solo.",
+        "Una mañana decidió marcharse lejos de la granja.",
+        "Pasó el frío invierno escondido junto a un lago.",
+        "Al llegar la primavera, vio su reflejo en el agua y descubrió que había crecido.",
+        "Era un hermoso cisne, y los otros cisnes lo recibieron con cariño."] },
+  { t: "La liebre y la tortuga", e: "🐢",
+    a: ["Una liebre presumía de ser la más veloz del bosque.",
+        "Una tortuga le propuso hacer una carrera.",
+        "La liebre salió corriendo y se echó a dormir bajo un árbol.",
+        "La tortuga caminó despacio, sin parar.",
+        "La tortuga llegó primero a la meta."],
+    b: ["Una liebre presumía todos los días de lo rápida que era.",
+        "Una tortuga, cansada de oírla, la retó a una carrera.",
+        "Al empezar, la liebre salió disparada y dejó atrás a la tortuga.",
+        "Confiada, la liebre se tumbó bajo un árbol y se quedó dormida.",
+        "La tortuga siguió andando despacio, sin detenerse ni un momento.",
+        "Cuando la liebre despertó, la tortuga ya estaba cruzando la meta."] }
+];
+
+const $ = s => document.querySelector(s);
+let nivel = "a", cuento = null, frases = [], order = [], pool = [], locked = new Set(), sel = null, drag = null;
+
+function show(id) {
+  document.querySelectorAll("main > section").forEach(s => s.hidden = s.id !== id);
+  window.scrollTo(0, 0);
+  const h = $("#" + id + " h2"); if (h) h.focus();
+}
+function shuffle(a) {
+  a = a.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+function mezclar(ids) {
+  let m = shuffle(ids);
+  if (ids.length > 1 && ids.every((v, i) => v === m[i])) m = shuffle(ids);
+  return m;
+}
+
+// Inicio
+function pintaLista() {
+  const l = $("#lista"); l.innerHTML = "";
+  CUENTOS.forEach(c => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "cuento";
+    b.innerHTML = '<span class="e"></span><b></b>';
+    b.firstChild.textContent = c.e; b.lastChild.textContent = c.t;
+    b.onclick = () => leer(c);
+    l.append(b);
+  });
+}
+document.querySelectorAll(".niveles button").forEach(b => b.onclick = () => {
+  nivel = b.dataset.n;
+  document.querySelectorAll(".niveles button").forEach(x => x.setAttribute("aria-pressed", x === b));
+});
+
+// Lectura
+function leer(c) {
+  cuento = c; frases = c[nivel];
+  $("#lectura h2").textContent = c.e + " " + c.t;
+  const t = $("#texto"); t.innerHTML = "";
+  frases.forEach(f => { const p = document.createElement("p"); p.textContent = f; t.append(p); });
+  show("lectura");
+}
+$("#volver1").onclick = () => show("inicio");
+$("#yaLei").onclick = empezar;
+$("#releer").onclick = () => show("lectura");
+$("#otro").onclick = () => show("inicio");
+
+// Juego
+function empezar() {
+  order = frases.map(() => null);
+  pool = mezclar(frases.map((_, i) => i));
+  locked = new Set(); sel = null;
+  pinta(); show("juego");
+}
+function crearCard(id) {
+  const c = document.createElement("button");
+  c.type = "button"; c.className = "card"; c.dataset.id = id;
+  c.textContent = frases[id];
+  if (locked.has(id)) { c.classList.add("locked"); c.setAttribute("aria-label", frases[id] + " (bien colocada)"); }
+  else c.draggable = true;
+  if (sel === id) { c.classList.add("sel"); c.setAttribute("aria-pressed", "true"); }
+  return c;
+}
+function pinta() {
+  const s = $("#slots"); s.innerHTML = "";
+  order.forEach((id, i) => {
+    const li = document.createElement("li");
+    li.className = "slot"; li.dataset.i = i;
+    const n = document.createElement("span");
+    n.className = "n"; n.textContent = i + 1; n.setAttribute("aria-hidden", "true");
+    li.append(n);
+    if (id !== null) li.append(crearCard(id));
+    s.append(li);
+  });
+  const p = $("#pool"); p.innerHTML = "";
+  pool.forEach(id => p.append(crearCard(id)));
+  $("#comprobar").disabled = pool.length > 0;
+}
+function quita(id) {
+  pool = pool.filter(x => x !== id);
+  const j = order.indexOf(id); if (j >= 0) order[j] = null;
+}
+function coloca(id, k) {
+  if (id === null || locked.has(order[k]) || locked.has(id)) return;
+  const ocupante = order[k];
+  quita(id);
+  if (ocupante !== null && ocupante !== id) pool.push(ocupante);
+  order[k] = id; sel = null;
+}
+function devuelve(id) {
+  if (locked.has(id)) return;
+  quita(id); pool.push(id); sel = null;
+}
+
+const juego = $("#juego");
+juego.addEventListener("click", e => {
+  const c = e.target.closest(".card"), s = e.target.closest(".slot");
+  if (c && locked.has(+c.dataset.id)) return;
+  if (c) {
+    const id = +c.dataset.id, k = order.indexOf(id);
+    if (sel === null) { if (k >= 0) devuelve(id); else sel = id; }
+    else if (sel === id) sel = null;
+    else if (k >= 0) coloca(sel, k);
+    else sel = id;
+  } else if (s && sel !== null) coloca(sel, +s.dataset.i);
+  else return;
+  pinta();
+});
+juego.addEventListener("dragstart", e => {
+  const c = e.target.closest(".card"); if (!c) return;
+  drag = +c.dataset.id; e.dataTransfer.setData("text/plain", drag); e.dataTransfer.effectAllowed = "move";
+});
+juego.addEventListener("dragover", e => { if (e.target.closest(".slot, #pool")) e.preventDefault(); });
+juego.addEventListener("drop", e => {
+  e.preventDefault();
+  const s = e.target.closest(".slot");
+  if (s) coloca(drag, +s.dataset.i); else if (e.target.closest("#pool")) devuelve(drag);
+  drag = null; pinta();
+});
+
+// Evaluación siempre en positivo
+$("#comprobar").onclick = () => {
+  order.forEach((id, i) => { if (id === i) locked.add(id); });
+  const x = locked.size, n = frases.length, todo = x === n;
+  const estrellas = todo ? 3 : x / n >= 0.5 ? 2 : 1;
+  $("#tituloFinal").textContent = todo ? "¡Lo has ordenado perfecto!"
+    : x / n >= 0.5 ? "¡Muy bien, casi lo tienes!" : "¡Buen comienzo, sigue así!";
+  const st = $("#estrellas");
+  st.innerHTML = "";
+  st.setAttribute("aria-label", estrellas + " de 3 estrellas");
+  for (let i = 0; i < 3; i++) {
+    const s = document.createElement("span");
+    s.textContent = "★"; s.setAttribute("aria-hidden", "true");
+    if (i >= estrellas) s.className = "off";
+    st.append(s);
+  }
+  const L = $("#logros"); L.innerHTML = "";
+  const msgs = ["Has leído «" + cuento.t + "» con atención."];
+  if (x > 0) msgs.push("Has colocado " + x + (x === 1 ? " frase" : " frases") + " en su sitio.");
+  msgs.push(todo ? "Ya conoces toda la historia de principio a fin."
+                 : "Cada intento te ayuda a conocer mejor la historia.");
+  msgs.forEach(m => { const li = document.createElement("li"); li.textContent = m; L.append(li); });
+  $("#seguir").hidden = todo;
+  show("final");
+};
+$("#seguir").onclick = () => {
+  const libres = frases.map((_, i) => i).filter(i => !locked.has(i));
+  order = order.map(id => (id !== null && locked.has(id)) ? id : null);
+  pool = mezclar(libres); sel = null;
+  pinta(); show("juego");
+};
+
+pintaLista();
+</script>
+</body>
+</html>
