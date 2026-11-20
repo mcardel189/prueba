@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Flor de Sal · Catas de vino en Sevilla</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#1f0f13;--panel:#2e161c;--panel2:#3a1d25;--line:#5a3039;--ink:#f6ebe0;--mute:#d9c4b6;--accent:#f0a56e;--accent-ink:#2a1208;--salt:#fffaf3;--ok:#9fd8a8;
+--serif:'Fraunces',Georgia,serif;--sans:'Figtree',system-ui,-apple-system,'Segoe UI',sans-serif}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 1.0625rem/1.6 var(--sans)}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
+h1,h2,h3{font-family:var(--serif);font-weight:700;line-height:1.12;margin:0 0 .5em}
+h1{font-size:clamp(2.4rem,6vw,4.4rem);letter-spacing:-.02em}
+h2{font-size:clamp(1.7rem,3.6vw,2.5rem)}h3{font-size:1.3rem}
+p{margin:0 0 1em;max-width:62ch}
+section{padding:72px 0;border-top:1px solid var(--line)}
+.lead{color:var(--mute);font-size:1.15rem}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:12px 24px;border-radius:6px;border:2px solid var(--accent);background:var(--accent);color:var(--accent-ink);font:700 1rem var(--sans);text-decoration:none;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--mute)}
+.btn:hover{filter:brightness(1.08)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+/* header */
+header{position:sticky;top:0;z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:16px;min-height:72px}
+.logo{font:700 1.5rem var(--serif);text-decoration:none;display:flex;align-items:center;gap:10px}
+.logo svg{width:26px;height:26px}
+nav ul{display:flex;gap:4px;justify-content:center;list-style:none;margin:0;padding:0;flex-wrap:wrap}
+nav a{display:block;padding:10px 12px;text-decoration:none;font-weight:500;border-radius:6px;font-size:.98rem}
+nav a:hover{background:var(--panel)}
+.tools{display:flex;gap:6px;align-items:center}
+.icon{width:48px;height:48px;display:grid;place-items:center;border-radius:6px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;position:relative;text-decoration:none}
+.icon svg{width:22px;height:22px}
+.count{position:absolute;top:2px;right:2px;min-width:20px;height:20px;border-radius:10px;background:var(--accent);color:var(--accent-ink);font:700 .75rem/20px var(--sans);text-align:center}
+.menu-btn{display:none}
+/* hero */
+.hero{padding:56px 0 72px;border:0}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center}
+.hero .lead{margin-bottom:1.5em}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.facts{display:flex;gap:20px;flex-wrap:wrap;margin-top:28px;color:var(--mute);font-size:.98rem}
+.facts span{display:flex;gap:8px;align-items:center}
+.next{background:var(--salt);color:#2a1a14;border-radius:10px;padding:26px;position:relative}
+.next h2{font-size:1.4rem;color:#2a1208}
+.next ul{list-style:none;margin:0 0 16px;padding:0}
+.next li{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #e5d5c6}
+.next li b{display:block;font-size:1rem}.next li small{color:#6b4d40;font-size:.9rem}
+.next .btn{min-height:44px;padding:8px 16px}
+.tag{font-size:.85rem;font-weight:700;border-radius:20px;padding:2px 10px;background:#2a1208;color:var(--salt)}
+.tag.low{background:#8a2c15}
+/* afinidad */
+.quiz{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:28px;max-width:760px}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin:14px 0}
+.opt{min-height:56px;padding:10px 14px;border-radius:8px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:500 1rem var(--sans);cursor:pointer;text-align:left}
+.opt:hover,.opt[aria-pressed=true]{border-color:var(--accent);background:var(--panel2)}
+.progress{display:flex;gap:6px;margin-bottom:16px}.progress i{height:5px;flex:1;background:var(--line);border-radius:3px}.progress i.on{background:var(--accent)}
+/* catas */
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);margin-top:28px}
+.cata{background:var(--bg);padding:24px;display:flex;flex-direction:column;gap:10px}
+.cata.hl{background:var(--panel2);box-shadow:inset 0 0 0 3px var(--accent)}
+.photo{height:130px;border-radius:6px;background:repeating-linear-gradient(135deg,#3a1d25 0 10px,#42222b 10px 20px);display:grid;place-items:center;color:var(--mute);font-size:.85rem}
+.meta{display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:.95rem;margin:0}
+.meta dt{color:var(--mute)}.meta dd{margin:0;font-weight:500}
+.int{display:flex;gap:4px;align-items:center}.int i{width:22px;height:8px;border-radius:2px;background:var(--line)}.int i.on{background:var(--accent)}
+.price{font:700 1.4rem var(--serif);margin-top:auto}
+/* reserva */
+.res{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;margin-top:28px}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:24px}
+.box h3{margin-bottom:.8em}
+label,.lbl{display:block;font-weight:700;margin:0 0 6px}
+select{width:100%;min-height:48px;border-radius:6px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:500 1rem var(--sans);padding:0 12px}
+.days{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:8px;margin:12px 0 16px}
+.day{min-height:64px;border-radius:8px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:500 .95rem/1.25 var(--sans);cursor:pointer;padding:6px}
+.day b{display:block;font-size:1.05rem}.day small{color:var(--mute)}
+.day[aria-pressed=true]{border-color:var(--accent);background:var(--panel2)}
+.day.full{opacity:.4;cursor:not-allowed;text-decoration:line-through}
+.slots{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.step{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.step button{width:48px;height:48px;border-radius:6px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:700 1.3rem var(--sans);cursor:pointer}
+.step output{min-width:2ch;text-align:center;font:700 1.4rem var(--serif)}
+.sum{border-top:1px solid var(--line);padding-top:14px;margin:14px 0}
+.sum div{display:flex;justify-content:space-between;padding:3px 0}
+.sum .tot{font:700 1.3rem var(--serif)}
+.pay{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.pay .btn{background:#000;border-color:#000;color:#fff}
+.note{font-size:.92rem;color:var(--mute)}
+.msg{min-height:1.5em;color:var(--ok);font-weight:700;margin-top:10px}
+/* vales */
+.tabs{display:flex;gap:8px;margin:20px 0}
+.tab{min-height:48px;padding:0 20px;border-radius:6px;border:2px solid var(--line);background:transparent;color:var(--ink);font:700 1rem var(--sans);cursor:pointer}
+.tab[aria-selected=true]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.gift{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start}
+.bono{background:var(--salt);color:#2a1a14;border-radius:10px;padding:28px;min-height:230px;display:flex;flex-direction:column;justify-content:space-between;border-left:10px solid #7a1f2e}
+.bono .code{font:700 1.2rem var(--serif);letter-spacing:.08em}
+.bono.card{border-left:0;border:3px double #7a1f2e}
+input[type=text]{width:100%;min-height:48px;border-radius:6px;border:2px solid var(--line);background:var(--bg);color:var(--ink);font:500 1rem var(--sans);padding:0 12px;margin-bottom:12px}
+/* tienda, bodega */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:24px}
+.bot{display:flex;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.bot .b{width:34px;height:76px;border-radius:14px 14px 4px 4px;background:linear-gradient(90deg,#4a1a24,#7a2a38);flex:none}
+.bot .b.w{background:linear-gradient(90deg,#8d8a4a,#c9c27a)}
+.bot div{flex:1}.bot b{display:block}.bot small{color:var(--mute)}
+.qr{display:grid;grid-template-columns:96px 1fr;gap:16px;align-items:center;margin-top:16px}
+.qr svg{width:96px;height:96px;background:var(--salt);padding:6px;border-radius:6px}
+/* sobre */
+.quote{font:500 clamp(1.4rem,3vw,2rem)/1.3 var(--serif);max-width:24ch}
+.rev{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:24px}
+.rev blockquote{margin:0;background:var(--panel);border-radius:8px;padding:18px;font-size:.98rem}
+/* footer */
+footer{background:#150a0d;border-top:1px solid var(--line);padding:48px 0 32px;font-size:.98rem}
+.fgrid{display:grid;grid-template-columns:1.2fr 1fr 1fr;gap:32px}
+footer ul{list-style:none;margin:0;padding:0}footer li{margin-bottom:6px}
+.lang{display:flex;gap:8px;margin-top:14px}.lang button{min-height:44px;padding:0 14px;border-radius:6px;border:2px solid var(--line);background:transparent;color:var(--ink);font:700 .95rem var(--sans);cursor:pointer}
+.lang button[aria-pressed=true]{border-color:var(--accent)}
+.news{display:flex;gap:8px;margin-top:10px}.news input{margin:0}
+.proto{font-size:.85rem;color:var(--mute);margin-top:28px;border-top:1px solid var(--line);padding-top:16px}
+@media(max-width:900px){
+ .bar{grid-template-columns:auto 1fr auto}
+ nav{display:none;grid-column:1/-1}nav.open{display:block;padding-bottom:12px}nav ul{flex-direction:column;align-items:stretch}
+ .menu-btn{display:grid}
+ .hero-grid,.res,.gift,.two,.fgrid{grid-template-columns:1fr}
+ .grid{grid-template-columns:1fr 1fr}.rev{grid-template-columns:1fr}
+ section{padding:56px 0}
+}
+@media(max-width:560px){.grid{grid-template-columns:1fr}.pay{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:no-preference){.next{animation:up .7s ease both}@keyframes up{from{opacity:0;transform:translateY(14px)}}}
+</style>
+</head>
+<body>
+<header>
+ <div class="wrap bar">
+  <a class="logo" href="#inicio" aria-label="Flor de Sal, inicio">
+   <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2l11 9-11 19L5 11z" fill="#fffaf3"/><path d="M5 11h22M11 11l5 19 5-19M16 2l-5 9M16 2l5 9" stroke="#7a1f2e" stroke-width="1.5" fill="none"/></svg>
+   Flor de Sal
+  </a>
+  <nav id="nav" aria-label="Principal">
+   <ul>
+    <li><a href="#catas">Nuestras catas</a></li>
+    <li><a href="#reservas">Reservas y bonos regalo</a></li>
+    <li><a href="#tienda">La bodega y la tienda</a></li>
+    <li><a href="#sobre">Sobre Flor de Sal</a></li>
+    <li><a href="#contacto">Contacto y ubicación</a></li>
+   </ul>
+  </nav>
+  <div class="tools">
+   <a class="icon" href="#bodega" aria-label="Mi cuenta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 15-5 16 0"/></svg></a>
+   <button class="icon" id="cartBtn" aria-label="Carrito"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 4h3l2.5 11h10L21 7H7"/><circle cx="10" cy="20" r="1.5"/><circle cx="17" cy="20" r="1.5"/></svg><span class="count" id="count">0</span></button>
+   <button class="icon menu-btn" id="menuBtn" aria-label="Abrir menú" aria-expanded="false" aria-controls="nav"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
+  </div>
+ </div>
+</header>
+
+<main id="inicio">
+<section class="hero">
+ <div class="wrap hero-grid">
+  <div>
+   <h1>Cada cliente es una joya.</h1>
+   <p class="lead">Catas de vino guiadas por André Salla en el barrio de San Lorenzo, Sevilla. Grupos pequeños, vinos de autor y tapas de la tierra desde 35 € por persona.</p>
+   <div class="cta-row"><a class="btn" href="#reservas">Reservar una cata</a><a class="btn ghost" href="#reservas" data-gift>Regalar una cata</a></div>
+   <div class="facts"><span>Desde 2010</span><span>4 o 5 vinos con tapas</span><span>De 1 h 30 a 2 h</span></div>
+  </div>
+  <aside class="next" aria-labelledby="nxt">
+   <h2 id="nxt">Próximas plazas libres</h2>
+   <ul id="nextList"></ul>
+   <a class="btn" href="#reservas">Ver todo el calendario</a>
+  </aside>
+ </div>
+</section>
+
+<section id="test">
+ <div class="wrap">
+  <h2>¿No sabes qué cata elegir? Tres preguntas.</h2>
+  <p class="lead">Sin saber de vino. Te recomendamos la cata que mejor encaja con lo que te gusta.</p>
+  <div class="quiz" id="quiz" aria-live="polite"></div>
+ </div>
+</section>
+
+<section id="catas">
+ <div class="wrap">
+  <h2>Nuestras catas</h2>
+  <p class="lead">Todo lo importante a primera vista: cuántos vinos, qué comes, cuánto dura y qué nivel necesitas.</p>
+  <div class="grid" id="grid"></div>
+ </div>
+</section>
+
+<section id="reservas">
+ <div class="wrap">
+  <h2>Reserva en dos pasos</h2>
+  <p class="lead">Elige fecha y personas. Pagas al momento con Apple Pay, Google Pay o tarjeta, sin crear cuenta.</p>
+  <div class="res">
+   <div class="box">
+    <h3>1. Cata, fecha y hora</h3>
+    <label for="sel">Cata</label>
+    <select id="sel"></select>
+    <p class="lbl" style="margin-top:16px">Viernes y sábados con plaza</p>
+    <div class="days" id="days"></div>
+    <p class="lbl">Hora</p>
+    <div class="slots" id="slots"></div>
+    <p class="lbl">Personas</p>
+    <div class="step"><button id="minus" aria-label="Menos personas">−</button><output id="pp">2</output><button id="plus" aria-label="Más personas">+</button><span class="note" id="left"></span></div>
+   </div>
+   <div class="box">
+    <h3>2. Pago</h3>
+    <div class="sum" aria-live="polite">
+     <div><span>Cata</span><span id="sCata">—</span></div>
+     <div><span>Fecha</span><span id="sDate">Elige una fecha</span></div>
+     <div><span>35 € × <span id="sN">2</span></span><span id="sSub">70 €</span></div>
+     <div class="tot"><span>Total</span><span id="sTot">70 €</span></div>
+    </div>
+    <p class="note">Precio final, sin gastos de gestión. Cancelación gratuita hasta 48 horas antes y cambio de fecha sin coste.</p>
+    <div class="pay"><button class="btn" id="apple">Apple Pay</button><button class="btn" id="google">Google Pay</button></div>
+    <button class="btn ghost" id="card" style="width:100%;margin-top:8px">Pagar con tarjeta</button>
+    <div class="msg" id="msg" role="status"></div>
+   </div>
+  </div>
+
+  <div id="regalo" style="margin-top:64px">
+   <h2>Regala una cata</h2>
+   <p class="lead">El bono no tiene fecha: quien lo recibe elige día en la web, en menos de 3 clics.</p>
+   <div class="tabs" role="tablist">
+    <button class="tab" role="tab" id="t1" aria-selected="true">Bono digital en PDF</button>
+    <button class="tab" role="tab" id="t2" aria-selected="false">Tarjeta física</button>
+   </div>
+   <div class="gift">
+    <div class="box">
+     <label for="to">Para quién es</label><input type="text" id="to" value="Marta" maxlength="30">
+     <label for="msgg">Dedicatoria</label><input type="text" id="msgg" value="Feliz cumpleaños, brinda por muchos años más" maxlength="70">
+     <p class="note" id="giftNote">Lo recibes al instante para imprimir o enviar por WhatsApp o correo. Incluye un código único para canjear la fecha en la web.</p>
+     <button class="btn" id="giftBuy">Comprar bono · 35 €</button>
+    </div>
+    <div class="bono" id="bono"><div><b>Flor de Sal · Bono de cata</b><p style="margin:.4em 0 0" id="pTo">Para Marta</p></div><p id="pMsg" style="font-family:var(--serif);font-size:1.2rem;margin:0">Feliz cumpleaños, brinda por muchos años más</p><span class="code" id="code">FDS-7K3Q-2026</span></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="tienda">
+ <div class="wrap">
+  <h2>La bodega y la tienda</h2>
+  <p class="lead">Compra aparte de la cata: la tienda tiene su propio sitio, como pidieron las personas que probaron la web.</p>
+  <div class="two">
+   <div>
+    <h3>Botellas de la casa</h3>
+    <div class="bot"><span class="b"></span><div><b>Tinto de autor, Sierra Norte</b><small>Se sirve en “Tintos de autor” · 18 €</small></div><button class="btn ghost add" data-n="Tinto Sierra Norte">Añadir</button></div>
+    <div class="bot"><span class="b w"></span><div><b>Fino en rama</b><small>Se sirve en “Generosos de Jerez” · 14 €</small></div><button class="btn ghost add" data-n="Fino en rama">Añadir</button></div>
+    <div class="bot"><span class="b"></span><div><b>Selección mensual</b><small>Dos vinos recomendados en tu casa · 29 €/mes</small></div><button class="btn ghost add" data-n="Selección mensual">Suscribirme</button></div>
+    <div class="qr">
+     <svg viewBox="0 0 10 10" aria-label="Código QR de ejemplo"><path fill="#2a1208" d="M0 0h3v3H0zM7 0h3v3H7zM0 7h3v3H0zM4 0h1v1H4zM4 2h2v1H4zM5 4h1v2H5zM0 4h2v1H0zM3 5h1v2H3zM7 5h3v1H7zM8 7h2v1H8zM6 8h1v2H6zM4 9h1v1H4zM9 9h1v1H9z"/></svg>
+     <p style="margin:0">Al terminar tu cata recibes un QR con descuento para comprar las botellas catadas durante 7 días, con recogida en tienda o envío.</p>
+    </div>
+   </div>
+   <div class="box" id="bodega">
+    <h3>Mi bodega personal</h3>
+    <p>Cada vino que catas queda guardado con su ficha y tus notas, para recordarlo y volver a comprarlo.</p>
+    <div class="bot"><div><b>Fino en rama</b><small>Generosos de Jerez</small><div class="int" aria-label="Intensidad 2 de 5"><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div></div><small>Tu nota: “almendra y sal”</small></div>
+    <div class="bot"><div><b>Tinto Sierra Norte</b><small>Tintos de autor</small><div class="int" aria-label="Intensidad 4 de 5"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div><small>Tu nota: “ciruela, especias”</small></div>
+    <button class="btn ghost" style="margin-top:12px">Entrar en mi cuenta</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section id="sobre">
+ <div class="wrap">
+  <h2>Sobre Flor de Sal</h2>
+  <p class="quote">Una tienda de barrio que se hizo escuela de vino.</p>
+  <p class="lead">Nació el 28 de marzo de 2010, un Domingo de Ramos sin luz, en la calle Carlos Cañal. Hoy André Salla enseña vino con rigor y sin pedantería, a grupos pequeños donde se puede preguntar todo.</p>
+  <div class="rev">
+   <blockquote>“Me explicó cada vino sin tecnicismos y por fin entendí lo que bebía.” <br><small>Opinión de ejemplo</small></blockquote>
+   <blockquote>“Sitio pequeño, trato cercano y maridajes de verdad, no solo picos.” <br><small>Opinión de ejemplo</small></blockquote>
+   <blockquote>“Regalé un bono por WhatsApp a las diez de la noche y lo canjearon al día siguiente.” <br><small>Opinión de ejemplo</small></blockquote>
+  </div>
+ </div>
+</section>
+
+<section id="contacto">
+ <div class="wrap two">
+  <div>
+   <h2>Contacto y ubicación</h2>
+   <p>Calle Carlos Cañal, barrio de San Lorenzo, Sevilla.</p>
+   <p>Abierto para catas los viernes por la tarde y los sábados. Para catas privadas o de empresa, escríbenos y te preparamos una propuesta.</p>
+   <a class="btn" href="#">Pedir cata privada</a>
+  </div>
+  <div class="photo" style="height:240px">Mapa y fotografía real del local</div>
+ </div>
+</section>
+</main>
+
+<footer>
+ <div class="wrap fgrid">
+  <div>
+   <a class="logo" href="#inicio">Flor de Sal</a>
+   <p class="note" style="margin-top:10px">Catas de vino en el centro de Sevilla desde 2010.</p>
+   <div class="lang" role="group" aria-label="Idioma"><button aria-pressed="true">ES</button><button aria-pressed="false">EN</button><button aria-pressed="false">DE</button></div>
+  </div>
+  <div><b>Información</b><ul><li><a href="#">Política de privacidad</a></li><li><a href="#">Condiciones de reserva</a></li><li><a href="#">Cancelaciones</a></li></ul></div>
+  <div><label for="mail">Avisos de catas nuevas</label><div class="news"><input type="text" id="mail" placeholder="Tu correo"><button class="btn">Apuntarme</button></div></div>
+ </div>
+ <div class="wrap"><p class="proto">Propuesta de diseño: textos de catas, precios de botellas y opiniones son de ejemplo. Las fotografías reales del local se sustituirán en las zonas rayadas.</p></div>
+</footer>
+
+<script>
+const CATAS=[
+ {n:'Tu primera cata',v:4,t:'Quesos y embutidos suaves',d:'1 h 30',l:'Iniciación',i:2,k:'ini'},
+ {n:'Generosos de Jerez',v:5,t:'Salazones, ibéricos y frutos secos',d:'1 h 45',l:'Iniciación',i:3,k:'dul'},
+ {n:'Tintos de autor de la Sierra Norte',v:5,t:'Quesos curados y carnes',d:'2 h',l:'Intermedio',i:5,k:'pot'},
+ {n:'Blancos frescos y mar',v:4,t:'Marisco, pescado y encurtidos',d:'1 h 30',l:'Iniciación',i:2,k:'fre'},
+ {n:'Noche de maridaje con quesos',v:5,t:'Selección de quesos artesanos',d:'2 h',l:'Temática',i:4,k:'que'},
+ {n:'Vinos ecológicos',v:4,t:'Tapas de temporada',d:'1 h 45',l:'Temática',i:3,k:'eco'}
+];
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let cart=0;const addCart=()=>{$('#count').textContent=++cart};
+/* catas */
+$('#grid').innerHTML=CATAS.map((c,j)=>`<article class="cata" id="c-${c.k}">
+ <div class="photo">Foto real</div><h3>${c.n}</h3>
+ <dl class="meta"><dt>Vinos</dt><dd>${c.v}</dd><dt>Tapas</dt><dd>${c.t}</dd><dt>Dura</dt><dd>${c.d}</dd><dt>Nivel</dt><dd>${c.l}</dd>
+ <dt>Intensidad</dt><dd><span class="int" role="img" aria-label="${c.i} de 5">${[1,2,3,4,5].map(x=>`<i class="${x<=c.i?'on':''}"></i>`).join('')}</span></dd></dl>
+ <div class="price">35 € <small style="font:400 .9rem var(--sans);color:var(--mute)">por persona</small></div>
+ <button class="btn" data-pick="${j}">Reservar esta cata</button></article>`).join('');
+$('#sel').innerHTML=CATAS.map((c,j)=>`<option value="${j}">${c.n}</option>`).join('');
+$$('[data-pick]').forEach(b=>b.onclick=()=>{$('#sel').value=b.dataset.pick;state.cata=+b.dataset.pick;upd();location.hash='#reservas'});
+/* calendario */
+const dn=['Dom','Lun','Mar','Mié','Jue','Vie','Sáb'],mn=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','dic'];
+const base=new Date(2026,10,20);const DAYS=[];
+for(let k=0;k<35;k++){const d=new Date(base);d.setDate(base.getDate()+k);const w=d.getDay();if(w==5||w==6){const left=[8,3,12,0,6,2,10,5,9,1][DAYS.length%10];DAYS.push({d,left,slots:w==5?['19:00','20:30']:['12:30','18:00','20:00']})}}
+const state={cata:0,day:null,slot:null,n:2};
+const fmt=d=>`${dn[d.getDay()]} ${d.getDate()} ${mn[d.getMonth()]}`;
+function drawDays(){$('#days').innerHTML=DAYS.map((x,j)=>`<button class="day ${x.left?'':'full'}" ${x.left?'':'disabled'} data-d="${j}" aria-pressed="${state.day===j}"><b>${fmt(x.d)}</b><small>${x.left?x.left+' plazas':'Completo'}</small></button>`).join('');
+ $$('.day').forEach(b=>b.onclick=()=>{state.day=+b.dataset.d;state.slot=DAYS[state.day].slots[0];state.n=Math.min(state.n,DAYS[state.day].left);drawDays();upd()})}
+function upd(){const x=DAYS[state.day];
+ $('#slots').innerHTML=x?x.slots.map(s=>`<button class="tab" role="radio" aria-checked="${s==state.slot}" aria-selected="${s==state.slot}" data-s="${s}">${s}</button>`).join(''):'<span class="note">Elige primero una fecha.</span>';
+ $$('[data-s]').forEach(b=>b.onclick=()=>{state.slot=b.dataset.s;upd()});
+ $('#pp').textContent=state.n;$('#left').textContent=x?`Quedan ${x.left} plazas`:'';
+ $('#sCata').textContent=CATAS[state.cata].n;$('#sDate').textContent=x?`${fmt(x.d)}, ${state.slot}`:'Elige una fecha';
+ $('#sN').textContent=state.n;$('#sSub').textContent=state.n*35+' €';$('#sTot').textContent=state.n*35+' €'}
+$('#sel').onchange=e=>{state.cata=+e.target.value;upd()};
+$('#minus').onclick=()=>{state.n=Math.max(1,state.n-1);upd()};
+$('#plus').onclick=()=>{const m=state.day===null?12:DAYS[state.day].left;state.n=Math.min(m,state.n+1);upd()};
+['#apple','#google','#card'].forEach(s=>$(s).onclick=()=>{$('#msg').textContent=state.day===null?'Elige una fecha para continuar.':`Reserva confirmada: ${state.n} persona${state.n>1?'s':''}, ${fmt(DAYS[state.day].d)} a las ${state.slot}. Te llega un correo con todo.`;$('#msg').style.color=state.day===null?'#ffb4a2':''});
+drawDays();upd();
+$('#nextList').innerHTML=DAYS.filter(x=>x.left).slice(0,3).map(x=>`<li><span><b>${fmt(x.d)}, ${x.slots[0]}</b><small>${CATAS[(x.d.getDate())%6].n}</small></span><span class="tag ${x.left<4?'low':''}">${x.left<4?'Últimas '+x.left:x.left+' plazas'}</span></li>`).join('');
+/* regalo */
+const bono=$('#bono');
+$('#to').oninput=e=>$('#pTo').textContent='Para '+e.target.value;
+$('#msgg').oninput=e=>$('#pMsg').textContent=e.target.value;
+function tab(i){$('#t1').setAttribute('aria-selected',i==1);$('#t2').setAttribute('aria-selected',i==2);bono.classList.toggle('card',i==2);
+ $('#giftNote').textContent=i==1?'Lo recibes al instante para imprimir o enviar por WhatsApp o correo. Incluye un código único para canjear la fecha en la web.':'Tarjeta impresa con sobre. La recoges en la tienda o te la enviamos por mensajería (5 € de envío, se ve antes de pagar).';
+ $('#giftBuy').textContent=i==1?'Comprar bono · 35 €':'Pedir tarjeta · 35 €'}
+$('#t1').onclick=()=>tab(1);$('#t2').onclick=()=>tab(2);
+$('#giftBuy').onclick=()=>{addCart();$('#giftBuy').textContent='Añadido al carrito'};
+$$('[data-gift]').forEach(a=>a.onclick=()=>tab(1));
+$$('.add').forEach(b=>b.onclick=()=>{addCart();b.textContent='Añadido'});
+$('#cartBtn').onclick=()=>alert(cart?cart+' artículo(s) en el carrito':'Tu carrito está vacío');
+/* menú móvil */
+$('#menuBtn').onclick=e=>{const o=$('#nav').classList.toggle('open');e.currentTarget.setAttribute('aria-expanded',o)};
+$$('#nav a').forEach(a=>a.onclick=()=>$('#nav').classList.remove('open'));
+$$('.lang button').forEach(b=>b.onclick=()=>$$('.lang button').forEach(x=>x.setAttribute('aria-pressed',x==b)));
+/* test de afinidad */
+const Q=[
+ {q:'¿Qué te gusta comer?',o:[['Quesos y embutidos',{pot:1,que:2}],['Pescado y marisco',{fre:2,eco:1}],['Salazones y frutos secos',{dul:2}],['De todo un poco',{ini:2}]]},
+ {q:'¿Prefieres sabores frescos o potentes?',o:[['Frescos y ligeros',{fre:2,ini:1,eco:1}],['Potentes y con cuerpo',{pot:2,que:1}],['Dulces o con carácter',{dul:2}],['No lo sé aún',{ini:2}]]},
+ {q:'¿Cuánto sabes de vino?',o:[['Nada, quiero empezar',{ini:3}],['Algo, me gusta probar',{eco:1,fre:1,dul:1}],['Bastante, busco algo distinto',{pot:2,que:1}]]}
+];
+let qi=0,sc={};
+function quiz(){const el=$('#quiz');
+ if(qi>=Q.length){const k=Object.entries(sc).sort((a,b)=>b[1]-a[1])[0][0],c=CATAS.find(x=>x.k==k);
+  el.innerHTML=`<h3>Tu cata: ${c.n}</h3><p>${c.v} vinos con ${c.t.toLowerCase()}. Dura ${c.d} y es de nivel ${c.l.toLowerCase()}.</p><div class="cta-row"><a class="btn" href="#c-${k}">Ver esta cata</a><button class="btn ghost" id="again">Repetir el test</button></div>`;
+  $$('.cata').forEach(x=>x.classList.toggle('hl',x.id=='c-'+k));$('#again').onclick=()=>{qi=0;sc={};$$('.cata').forEach(x=>x.classList.remove('hl'));quiz()};return}
+ const q=Q[qi];el.innerHTML=`<div class="progress">${Q.map((_,j)=>`<i class="${j<=qi?'on':''}"></i>`).join('')}</div><h3>${q.q}</h3><div class="opts">${q.o.map((o,j)=>`<button class="opt" data-o="${j}">${o[0]}</button>`).join('')}</div>`;
+ $$('.opt').forEach(b=>b.onclick=()=>{const p=q.o[b.dataset.o][1];for(const k in p)sc[k]=(sc[k]||0)+p[k];qi++;quiz()})}
+quiz();
+</script>
+</body>
+</html>
